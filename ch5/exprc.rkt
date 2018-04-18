@@ -65,3 +65,7 @@
                                  a) defs)]
     [plusC (l r) (+ (evaluate l defs) (evaluate r defs))]
     [multC (l r) (* (evaluate l defs) (evaluate r defs))]))
+
+(define defs
+  (list
+   (fdC 'pf 'n (desugar (parse '(+ 5 n))))))
