@@ -44,9 +44,24 @@
     [uminusS (e) (multC (numC -1) (desugar e))]
     [bminusS (l r) (plusC (desugar l) (multC (numC -1) (desugar r)))]))
 
+(define (apply [fun : FunDefC] [param : ExprC]) : ExprC
+  (local [(define (replace [e : ExprC]) : ExprC
+            (type-case ExprC e
+              [idC (s) (if (equal? s (fdC-arg fun)) param e)]
+              [appC (n a) (appC n (replace a))]
+              [plusC (l r) (plusC (replace l) (replace r))]
+              [multC (l r) (multC (replace l) (replace r))]
+              [else e]))]
+    (replace (fdC-body fun))))
+
 (define (evaluate [e : ExprC] [defs : (listof FunDefC)]) : number
   (type-case ExprC e
     [numC (n) n]
     [idC (s) (error 'evaluate "Unexpected identifier")]
+    [appC (n a) (evaluate (apply (first (filter
+                                         (lambda ([def : FunDefC])
+                                           (equal? n (fdC-name def)))
+                                         defs))
+                                 a) defs)]
     [plusC (l r) (+ (evaluate l defs) (evaluate r defs))]
     [multC (l r) (* (evaluate l defs) (evaluate r defs))]))
