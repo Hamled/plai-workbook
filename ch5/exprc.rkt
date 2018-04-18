@@ -5,6 +5,9 @@
   [plusC (l : ExprC) (r : ExprC)]
   [multC (l : ExprC) (r : ExprC)])
 
+(define-type FunDefC
+  [fdC (name : symbol) (arg : symbol) (body : ExprC)])
+
 (define-type ExprS
   [numS (n : number)]
   [plusS (l : ExprS) (r : ExprS)]
