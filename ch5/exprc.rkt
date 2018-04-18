@@ -2,6 +2,8 @@
 
 (define-type ExprC
   [numC (n : number)]
+  [idC (s : symbol)]
+  [appC (name : symbol) (arg : ExprC)]
   [plusC (l : ExprC) (r : ExprC)]
   [multC (l : ExprC) (r : ExprC)])
 
@@ -10,6 +12,8 @@
 
 (define-type ExprS
   [numS (n : number)]
+  [idS (s : symbol)]
+  [appS (name : symbol) (arg : ExprS)]
   [plusS (l : ExprS) (r : ExprS)]
   [multS (l : ExprS) (r : ExprS)]
   [uminusS (e : ExprS)]
