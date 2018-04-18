@@ -44,8 +44,8 @@
     [uminusS (e) (multC (numC -1) (desugar e))]
     [bminusS (l r) (plusC (desugar l) (multC (numC -1) (desugar r)))]))
 
-(define (evaluate [e : ExprC]) : number
+(define (evaluate [e : ExprC] [defs : (listof FunDefC)]) : number
   (type-case ExprC e
     [numC (n) n]
-    [plusC (l r) (+ (evaluate l) (evaluate r))]
-    [multC (l r) (* (evaluate l) (evaluate r))]))
+    [plusC (l r) (+ (evaluate l defs) (evaluate r defs))]
+    [multC (l r) (* (evaluate l defs) (evaluate r defs))]))
