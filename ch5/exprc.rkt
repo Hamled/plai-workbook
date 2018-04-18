@@ -48,7 +48,12 @@
   (local [(define (replace [e : ExprC]) : ExprC
             (type-case ExprC e
               [idC (s) (if (equal? s (fdC-arg fun)) param e)]
-              [appC (n a) (appC n (replace a))]
+              [appC (n a) (appC (if (equal? n (fdC-arg fun))
+                                    (type-case ExprC param
+                                      [idC (s) s]
+                                      [else (error 'apply "Cannot apply non-identifer")])
+                                    n)
+                                (replace a))]
               [plusC (l r) (plusC (replace l) (replace r))]
               [multC (l r) (multC (replace l) (replace r))]
               [else e]))]
@@ -68,4 +73,5 @@
 
 (define defs
   (list
-   (fdC 'pf 'n (desugar (parse '(+ 5 n))))))
+   (fdC 'pf 'n (desugar (parse '(+ 5 n))))
+   (fdC 'twice 'f (desugar (parse '(+ (f 0) (f 0)))))))
