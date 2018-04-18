@@ -47,5 +47,6 @@
 (define (evaluate [e : ExprC] [defs : (listof FunDefC)]) : number
   (type-case ExprC e
     [numC (n) n]
+    [idC (s) (error 'evaluate "Unexpected identifier")]
     [plusC (l r) (+ (evaluate l defs) (evaluate r defs))]
     [multC (l r) (* (evaluate l defs) (evaluate r defs))]))
