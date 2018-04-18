@@ -37,6 +37,8 @@
 (define (desugar [e : ExprS]) : ExprC
   (type-case ExprS e
     [numS (n) (numC n)]
+    [idS (s) (idC s)]
+    [appS (n a) (appC n (desugar a))]
     [plusS (l r) (plusC (desugar l) (desugar r))]
     [multS (l r) (multC (desugar l) (desugar r))]
     [uminusS (e) (multC (numC -1) (desugar e))]
