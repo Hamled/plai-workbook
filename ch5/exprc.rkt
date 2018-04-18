@@ -22,6 +22,7 @@
 (define (parse [s : s-expression]) : ExprS
   (cond
     [(s-exp-number? s) (numS (s-exp->number s))]
+    [(s-exp-symbol? s) (idS (s-exp->symbol s))]
     [(s-exp-list? s)
      (let ([sl (s-exp->list s)])
        (case (s-exp->symbol (first sl))
@@ -30,7 +31,7 @@
          [(-) (case (length sl)
                 [(2) (uminusS (parse (second sl)))]
                 [(3) (bminusS (parse (second sl)) (parse (third sl)))])]
-         [else (error 'parse "invalid list input")]))]
+         [else (appS (s-exp->symbol (first sl)) (parse (second sl)))]))]
     [else (error 'parse "invalid input")]))
 
 (define (desugar [e : ExprS]) : ExprC
